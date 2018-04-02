@@ -95,15 +95,46 @@ void Driver::setup()
 #endif // CV_CAP_PROP_BUFFERSIZE
 
   rate_.reset(new ros::Rate(hz));
+
+  set_config_ = private_node_.advertiseService("set_config", &Driver::setConfig, this);
 }
 
 void Driver::proceed()
 {
-  if (camera_->capture())
+  bool res;
+  {
+    std::lock_guard<std::mutex> lock(capture_mutex_);
+    res = camera_->capture();
+  }
+  if (res)
   {
     camera_->publish();
   }
   rate_->sleep();
+}
+
+bool Driver::setConfig(cv_camera::SetConfig::Request& request, cv_camera::SetConfig::Response& response)
+{
+  ROS_INFO("Change resoltuion to %dx%d", request.image_width, request.image_height);
+
+  std::lock_guard<std::mutex> lock(capture_mutex_);
+  // Set image width and height
+  if (!camera_->setWidth(request.image_width))
+  {
+    ROS_WARN("fail to set image_width");
+    response.message = "failed to set image_width";
+    return true;
+  }
+
+  if (!camera_->setHeight(request.image_height))
+  {
+    ROS_WARN("fail to set image_height");
+    response.message = "failed to set image_height";
+    return true;
+  }
+
+  response.success = true;
+  return true;
 }
 
 Driver::~Driver()

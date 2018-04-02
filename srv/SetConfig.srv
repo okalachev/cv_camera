@@ -1,0 +1,5 @@
+uint32 image_width
+uint32 image_height
+---
+bool success
+string message

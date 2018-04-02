@@ -146,18 +146,20 @@ public:
     return cap_.set(CV_CAP_PROP_FRAME_HEIGHT, height);
   }
 
+  bool setProperty(int property_id, double value);
+
   /**
    * @brief set CV_PROP_*
    * @return true if success
    */
   bool setPropertyFromParam(int property_id, const std::string &param_name);
 
-private:
   /**
    * @brief rescale camera calibration to another resolution
    */
   void rescaleCameraInfo(int width, int height);
 
+private:
   /**
    * @brief node handle for advertise.
    */
