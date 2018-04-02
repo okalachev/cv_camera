@@ -4,6 +4,7 @@
 #define CV_CAMERA_DRIVER_H
 
 #include "cv_camera/capture.h"
+#include "cv_camera/SetConfig.h"
 
 namespace cv_camera
 {
@@ -39,6 +40,10 @@ class Driver
    * @brief Capture, publish and sleep
    */
   void proceed();
+  /**
+   * @brief Capture, publish and sleep
+   */
+  bool setConfig(cv_camera::SetConfig::Request&, cv_camera::SetConfig::Response&);
  private:
   /**
    * @brief ROS private node for getting ROS parameters.
@@ -57,6 +62,11 @@ class Driver
    * @brief publishing rate.
    */
   boost::shared_ptr<ros::Rate> rate_;
+
+  /**
+   * @brief set_config service server
+   */
+  ros::ServiceServer set_config_;
 };
 
 }  // namespace cv_camera

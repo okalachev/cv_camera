@@ -1,0 +1,6 @@
+float64 image_width
+float64 image_height
+float64 cv_cap_prop_fps
+---
+bool success
+string message

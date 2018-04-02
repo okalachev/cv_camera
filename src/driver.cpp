@@ -95,6 +95,8 @@ void Driver::setup()
 #endif // CV_CAP_PROP_BUFFERSIZE
 
   rate_.reset(new ros::Rate(hz));
+
+  set_config_ = private_node_.advertiseService("set_config", &Driver::setConfig, this);
 }
 
 void Driver::proceed()
@@ -104,6 +106,35 @@ void Driver::proceed()
     camera_->publish();
   }
   rate_->sleep();
+}
+
+bool Driver::setConfig(cv_camera::SetConfig::Request& request, cv_camera::SetConfig::Response& response)
+{
+  if (std::isfinite(request.image_width) && std::isfinite(request.image_height))
+  {
+    // Set image width and height
+    if (!camera_->setWidth(request.image_width))
+    {
+      ROS_WARN("fail to set image_width");
+      response.message = "failed to set image_width";
+      return true;
+    }
+    if (!camera_->setHeight(request.image_height))
+    {
+      ROS_WARN("fail to set image_height");
+      response.message = "failed to set image_height";
+      return true;
+    }
+  }
+  if (std::isfinite(request.cv_cap_prop_fps))
+  {
+    if (!camera_->setProperty(CV_CAP_PROP_FPS, request.cv_cap_prop_fps)) {
+      ROS_WARN("fail to set image_height");
+      response.message = "failed to set fps";
+      return true;
+    }
+  }
+  return true;
 }
 
 Driver::~Driver()

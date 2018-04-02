@@ -2,13 +2,22 @@ cmake_minimum_required(VERSION 2.8.3)
 project(cv_camera)
 
 find_package(catkin REQUIRED COMPONENTS
-  image_transport roscpp cv_bridge sensor_msgs nodelet camera_info_manager roslint)
+  image_transport roscpp cv_bridge sensor_msgs nodelet camera_info_manager roslint message_generation)
 
 find_package(OpenCV REQUIRED)
 
 find_package(Boost REQUIRED COMPONENTS system thread)
 
 roslint_cpp()
+
+add_service_files(
+  FILES
+  SetConfig.srv
+)
+
+generate_messages(
+  DEPENDENCIES
+)
 
 catkin_package(
   INCLUDE_DIRS include

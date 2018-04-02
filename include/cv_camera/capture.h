@@ -146,6 +146,8 @@ public:
     return cap_.set(CV_CAP_PROP_FRAME_HEIGHT, height);
   }
 
+  bool setProperty(int property_id, double value);
+
   /**
    * @brief set CV_PROP_*
    * @return true if success
