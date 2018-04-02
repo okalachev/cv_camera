@@ -171,6 +171,11 @@ void Capture::publish()
   pub_.publish(*getImageMsgPtr(), info_);
 }
 
+bool Capture::setProperty(int property_id, double value)
+{
+  return cap_.set(property_id, value);
+}
+
 bool Capture::setPropertyFromParam(int property_id, const std::string &param_name)
 {
   if (cap_.isOpened())
@@ -179,7 +184,7 @@ bool Capture::setPropertyFromParam(int property_id, const std::string &param_nam
     if (node_.getParam(param_name, value))
     {
       ROS_INFO("setting property %s = %lf", param_name.c_str(), value);
-      return cap_.set(property_id, value);
+      setProperty(property_id, value);
     }
   }
   return true;
