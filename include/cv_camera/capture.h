@@ -215,6 +215,8 @@ private:
    * @brief rescale_camera_info param value
    */
   bool rescale_camera_info_;
+
+  ros::Duration capture_delay_;
 };
 
 } // namespace cv_camera
