@@ -42,7 +42,8 @@ private:
     }
     catch (cv_camera::DeviceError &e)
     {
-      NODELET_ERROR_STREAM("failed to open device... do nothing: " << e.what());
+      NODELET_ERROR_STREAM("failed to open device: " << e.what());
+      throw;
     }
   }
 
