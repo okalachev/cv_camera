@@ -37,13 +37,13 @@ private:
     try
     {
       driver_->setup();
-      is_running_ = true;
-      thread_ = boost::shared_ptr<boost::thread>(new boost::thread(boost::bind(&CvCameraNodelet::main, this)));
     }
     catch (cv_camera::DeviceError &e)
     {
-      NODELET_ERROR_STREAM("failed to open device... do nothing: " << e.what());
+      NODELET_ERROR_STREAM("failed to setup device... continue: " << e.what());
     }
+    is_running_ = true;
+    thread_ = boost::shared_ptr<boost::thread>(new boost::thread(boost::bind(&CvCameraNodelet::main, this)));
   }
 
   /**
@@ -53,7 +53,16 @@ private:
   {
     while (is_running_)
     {
-      driver_->proceed();
+      if (!driver_->proceed()) {
+        ROS_WARN_THROTTLE(1, "unable to capture: recovering");
+        try {
+          driver_->setup();
+        }
+        catch (cv_camera::DeviceError &e)
+        {
+          ROS_WARN_THROTTLE(1, "failed to setup device... continue: %s", e.what());
+        }
+      }
     }
   }
 

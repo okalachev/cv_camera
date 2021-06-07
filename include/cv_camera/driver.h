@@ -38,7 +38,7 @@ class Driver
   /**
    * @brief Capture, publish and sleep
    */
-  void proceed();
+  bool proceed();
  private:
   /**
    * @brief ROS private node for getting ROS parameters.

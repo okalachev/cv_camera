@@ -2,6 +2,9 @@
 Changelog for package cv_camera
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.5.1 (2021-06-04)
+* Recover on camera devices failures
+
 0.5.0 (2020-05-30)
 ------------------
 * Use OpenCV 3.x+ enums instead of 2.x defines (#28)

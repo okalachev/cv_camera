@@ -38,11 +38,14 @@ void Driver::setup()
   int32_t image_width(640);
   int32_t image_height(480);
 
-  camera_.reset(new Capture(camera_node_,
-                            "image_raw",
-                            PUBLISHER_BUFFER_SIZE,
-                            frame_id,
-                            camera_name));
+
+  if (!camera_) {
+    camera_.reset(new Capture(camera_node_,
+                              "image_raw",
+                              PUBLISHER_BUFFER_SIZE,
+                              frame_id,
+                              camera_name));
+  }
 
   if (private_node_.getParam("file", file_path) && file_path != "")
   {
@@ -97,13 +100,16 @@ void Driver::setup()
   rate_.reset(new ros::Rate(hz));
 }
 
-void Driver::proceed()
+bool Driver::proceed()
 {
   if (camera_->capture())
   {
     camera_->publish();
+  } else {
+    return false;
   }
   rate_->sleep();
+  return true;
 }
 
 Driver::~Driver()

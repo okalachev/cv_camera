@@ -43,6 +43,11 @@ public:
           const std::string &camera_name);
 
   /**
+   * @brief shutdown resources
+   */
+  ~Capture();
+
+  /**
    * @brief Open capture device with device ID.
    *
    * @param device_id id of camera device (number from 0)

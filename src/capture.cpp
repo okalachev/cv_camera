@@ -22,6 +22,11 @@ Capture::Capture(ros::NodeHandle &node, const std::string &topic_name,
 {
 }
 
+Capture::~Capture()
+{
+  pub_.shutdown();
+}
+
 void Capture::loadCameraInfo()
 {
   std::string url;
